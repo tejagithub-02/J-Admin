@@ -22,6 +22,9 @@
       overflow-x: hidden;
     }
     .theme-blue { background: linear-gradient(to right, #1e3a8a, #3b82f6); }
+    .theme-purity { background: linear-gradient(to right, #ff6f00, #fb923c); }
+    .theme-prosperity { background: linear-gradient(to right, #b45309, #facc15); }
+    .theme-harmony { background: linear-gradient(to right, #166534, #4ade80); }
     #topbar {
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -32,6 +35,14 @@
     #topbar h1 {
       font-family: 'Georgia', serif;
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    #topbar select {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: background 0.3s;
+    }
+    #topbar select:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
     #topbar img {
       filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
@@ -230,6 +241,7 @@
       #topbar h1 { font-size: 1.2rem; }
       #topbar img { width: 50px; height: 50px; }
       #topbar .admin-icon { font-size: 2.25rem; }
+      #topbar select { font-size: 0.875rem; padding: 0.25rem 0.5rem; }
       .dashboard-container { flex-direction: column; }
       .sidebar {
         width: 250px;
@@ -259,6 +271,8 @@
       .sidebar-expand {
         display: none !important;
       }
+      .sidebar h3 { font-size: 1.4rem; }
+      .sidebar a { font-size: 1rem; padding: 10px; }
       .main-content {
         padding: 20px;
         margin-left: 0;
@@ -272,11 +286,15 @@
       .sidebar-toggle {
         display: none;
       }
+      .admin-dropdown {
+        right: 10px;
+      }
     }
     @media (max-width: 480px) {
       #topbar { padding: 8px; }
       #topbar img { width: 45px; height: 45px; }
       #topbar .admin-icon { font-size: 1.5rem; }
+      #topbar select { font-size: 0.75rem; padding: 0.2rem 0.4rem; }
       .main-content { padding: 15px; }
       .section-container { padding: 15px; }
       .section-container h3 { font-size: 1.3rem; }
@@ -292,14 +310,17 @@
   <nav id="topbar" class="theme-blue text-white p-4 flex justify-between items-center sticky top-0 z-10 w-full">
     <div class="flex items-center space-x-4">
       <i class="fas fa-bars sidebar-toggle" id="sidebar-toggle"></i>
+      <i class="fas fa-bars menu-toggle" id="menu-toggle"></i>
       <img src="images/logo.png" alt="Rama Logo" class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16">
       <h1 class="text-xl font-bold">SJRSM</h1>
-      <i class="fas fa-bars menu-toggle"></i>
+      
     </div>
-    <div class="flex items-center relative">
-      <i class="fas fa-user-circle admin-icon text-2xl" id="admin-icon"></i>
-      <div class="admin-dropdown" id="admin-dropdown">
-        <a href="edit.html" class="dropdown-item">Edit Profile</a>
+    <div class="flex items-center space-x-4">
+      <div class="relative">
+        <i class="fas fa-user-circle admin-icon text-2xl" id="admin-icon"></i>
+        <div class="admin-dropdown" id="admin-dropdown">
+          <a href="edit.html" class="dropdown-item">Edit Profile</a>
+        </div>
       </div>
     </div>
   </nav>
@@ -316,9 +337,7 @@
       <a href="feedback.html"><i class="fas fa-comment"></i> <span>Feedback</span></a>
       <a href="live.html"><i class="fas fa-video"></i> <span>Live Streaming</span></a>
       <a href="Advertisement.html"><i class="fas fa-ad"></i> <span>Add Banner</span></a>
-
       <a href="gallery-upload.html" class="active"><i class="fas fa-image"></i> <span>Gallery</span></a>
-     
       <a href="password.html"><i class="fas fa-key"></i> <span>Change Password</span></a>
       <a href="#" id="sidebar-sign-out"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
     </div>
@@ -332,8 +351,6 @@
             <form id="gallery-upload-form">
               <label for="image-title">Image Title</label>
               <input type="text" id="image-title" name="title" required>
-
-             
               <label for="image-file">Upload Image</label>
               <input type="file" id="image-file" name="image" accept="image/*" required>
               <button type="submit" class="btn btn-primary">Upload Image</button>
