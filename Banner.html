@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JRSM Admin - Sign Out</title>
+  <title>JRSM Admin - Live Streaming Management</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -158,8 +158,9 @@
       margin-left: 250px;
       overflow-y: auto;
       min-height: calc(100vh - 64px);
-      display: flex;
+      display: flex !important;
       flex-direction: column;
+      min-width: 0;
       transition: margin-left 0.3s ease;
     }
     .main-content.collapsed {
@@ -229,6 +230,11 @@
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
       border: 1px solid #ecc94b;
       font-family: 'Times New Roman', Times, serif;
+      display: block !important;
+      max-height: none !important;
+      overflow: visible !important;
+      /* Debugging outline */
+      outline: 2px solid red;
     }
     .ads-section .section-container {
       background: linear-gradient(to bottom right, #f7fafc, #e6e6e6);
@@ -253,17 +259,23 @@
       font-size: 1.6rem;
     }
     .section-container table {
-      width: 100%;
+      width: 100% !important;
       border-collapse: collapse;
       background: #fff;
       border-radius: 8px;
-      overflow: hidden;
+      overflow: visible !important;
+      visibility: visible !important;
+      display: table !important;
+      max-height: none !important;
+      /* Debugging outline */
+      outline: 2px solid blue;
     }
     .section-container th, .section-container td {
       padding: 14px;
       text-align: left;
       border-bottom: 1px solid #e2e8f0;
       font-size: 1.1rem;
+      white-space: nowrap;
     }
     .section-container th {
       background: linear-gradient(to right, #2c5282, #4a90e2);
@@ -271,6 +283,12 @@
     }
     .section-container td {
       color: #333;
+    }
+    .section-container td img {
+      max-width: 100px;
+      max-height: 100px;
+      object-fit: contain;
+      border-radius: 5px;
     }
     .section-container p {
       font-size: 1.2rem;
@@ -281,7 +299,9 @@
       display: flex;
       flex-direction: column;
       gap: 15px;
-      max-width: 500px;
+      max-width: 100%;
+      /* Debugging outline */
+      outline: 2px solid green;
     }
     .section-container form label {
       font-size: 1.1rem;
@@ -305,9 +325,11 @@
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       display: none;
+      max-width: 100%;
     }
     .edit-form-container.active {
-      display: block;
+      display: block !important;
+      z-index: 10;
     }
     .btn {
       padding: 10px 18px;
@@ -373,23 +395,21 @@
       width: 100%;
       margin-top: auto;
     }
-    #seva-table-container,
-    #event-table-container,
-    #ads-table-container,
     #streaming-table-container {
       transition: opacity 0.3s ease;
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      overflow-x: auto !important;
+      overflow-y: visible !important;
+      max-height: none !important;
+      width: 100% !important;
+      /* Debugging outline */
+      outline: 2px solid yellow;
     }
-    #seva-table-container[style*="display: none"],
-    #event-table-container[style*="display: none"],
-    #ads-table-container[style*="display: none"],
-    #streaming-table-container[style*="display: none"] {
-      opacity: 0;
-    }
-    #seva-table-container,
-    #event-table-container,
-    #ads-table-container,
-    #streaming-table-container {
-      opacity: 1;
+    #streaming-table-container.hidden {
+      display: none !important;
+      opacity: 0 !important;
     }
     @media (min-width: 769px) {
       .sidebar-toggle {
@@ -460,6 +480,7 @@
       .section-container { padding: 15px; }
       .section-container h3 { font-size: 1.3rem; }
       .section-container th, .section-container td { padding: 10px; font-size: 0.95rem; }
+      .section-container td img { max-width: 80px; max-height: 80px; }
       .section-container p { font-size: 1rem; }
       .btn { padding: 8px 14px; font-size: 0.9rem; }
       .btn-sm { padding: 5px 10px; font-size: 0.85rem; }
@@ -476,6 +497,7 @@
   <nav id="topbar" class="theme-blue text-white p-4 flex justify-between items-center sticky top-0 z-10 w-full">
     <div class="flex items-center space-x-4">
       <i class="fas fa-bars sidebar-toggle" id="sidebar-toggle"></i>
+     
       <i class="fas fa-bars menu-toggle"></i>
       <img src="images/logo.png" alt="Rama Logo" class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16">
       <h1 class="text-xl font-bold">SJRSM</h1>
@@ -498,19 +520,67 @@
       <a href="index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
       <a href="seva.html"><i class="fas fa-pray"></i> <span>Seva Management</span></a>
       <a href="events.html"><i class="fas fa-calendar-alt"></i> <span>Events</span></a>
-     
-      <a href="live.html"><i class="fas fa-video"></i> <span>Live Streaming</span></a>
-      <a href="Advertisement.html"><i class="fas fa-ad"></i> <span>Add Advertisement/span></a>
-      <a href="Banner.html"><i class="fas fa-ad"></i> <span>Add Banner</span></a>
+      
+      <a href="live.html" ><i class="fas fa-video"></i> <span>Live Streaming</span></a>
+      <a href="Advertisement.html"><i class="fas fa-ad"></i> <span>Add Advertisement</span></a>
+      <a href="#" class="active"><i class="fas fa-ad"></i> <span>Add Banner</span></a>
       <a href="gallery-upload.html"><i class="fas fa-image"></i> <span>Gallery</span></a>
       <a href="publications.html" ><i class="fas fa-file-pdf"></i> <span>Add Publications</span></a>
       <a href="password.html"><i class="fas fa-key"></i> <span>Change Password</span></a>
-      <a href="#" id="#" class="active"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
+      <a href="#" id="sidebar-sign-out"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
     </div>
 
-    <!-- Sign Out Section -->
+    <!-- Live Streaming Management Section -->
     <div class="main-content">
-      <!-- No content -->
+      <div id="streaming-section" class="section streaming-section">
+        <div class="section-container">
+          <h3>Banner Management</h3>
+          <!-- Edit/Add Form -->
+          <div id="streaming-edit-form-container" class="edit-form-container">
+            <h3 id="streaming-form-title">Add New Banner</h3>
+            <form id="streaming-edit-form">
+              <input type="hidden" id="streaming-edit-id">
+              <div class="form-group">
+                <label for="streaming-edit-title">Banner Title</label>
+                <input type="text" id="streaming-edit-title" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="streaming-edit-image">Banner Image</label>
+                <input type="file" id="streaming-edit-image" class="form-control" accept="image/*">
+              </div>
+              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="button" class="btn btn-danger" onclick="cancelEdit('streaming')">Cancel</button>
+            </form>
+          </div>
+          <!-- Table Container -->
+          <div id="streaming-table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>SI.NO</th>
+                  <th>Title</th>
+                  <th>Image</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="streaming-table-body">
+                <tr data-id="stream-1" data-image="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABYSURBVFhH7dcxCoAwDATQXf//0y4sECoW3Z0tMBNBPPY9Qz0M8/BaABHACxABvABRwAtQBXwAVcAHUAV8AFXAB1AFfABVwAdQBXwAVcAHUAV8AFXAB1AFfABV4AcI6z3NMS0c6gAAAABJRU5ErkJggg==">
+                 <td>1</td>
+                  <td>Morning Puja</td>
+                  <td><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABYSURBVFhH7dcxCoAwDATQXf//0y4sECoW3Z0tMBNBPPY9Qz0M8/BaABHACxABvABRwAtQBXwAVcAHUAV8AFXAB1AFfABVwAdQBXwAVcAHUAV8AFXAB1AFfABV4AcI6z3NMS0c6gAAAABJRU5ErkJggg==" alt="Morning Puja" onerror="this.src='https://via.placeholder.com/100?text=Image+Not+Found'"></td>
+                  <td>
+                    <a href="#" class="btn btn-primary btn-sm edit-btn" data-section="streaming">Edit</a>
+                    <a href="#" class="btn btn-danger btn-sm delete-btn">Delete</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <a href="#" class="btn btn-success mt-3" id="add-stream-btn">Add New Banner</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Global Footer -->
       <footer class="main-footer">
         @2025 Sri JayaRama Seva Mandali - Developed By Bloom It Solutions
       </footer>
@@ -567,7 +637,202 @@
         console.error('Admin dropdown elements not found');
       }
 
-      
+      // Live Streaming functionality
+      const editFormContainer = document.getElementById('streaming-edit-form-container');
+      const tableContainer = document.getElementById('streaming-table-container');
+      const editForm = document.getElementById('streaming-edit-form');
+      const formTitle = document.getElementById('streaming-form-title');
+      const editIdInput = document.getElementById('streaming-edit-id');
+      const addStreamButton = document.getElementById('add-stream-btn');
+      const tableBody = document.getElementById('streaming-table-body');
+
+      if (!editFormContainer || !tableContainer || !editForm || !formTitle || !editIdInput || !addStreamButton || !tableBody) {
+        console.error('Streaming section elements not found');
+        return;
+      }
+
+      // Ensure table is visible on load
+      tableContainer.classList.remove('hidden');
+      console.log('Streaming table container loaded:', {
+        display: tableContainer.style.display,
+        opacity: tableContainer.style.opacity,
+        visibility: tableContainer.style.visibility,
+        offsetHeight: tableContainer.offsetHeight
+      });
+
+      // Force table visibility on resize
+      window.addEventListener('resize', () => {
+        tableContainer.classList.remove('hidden');
+        console.log('Table visibility on resize:', {
+          display: tableContainer.style.display,
+          opacity: tableContainer.style.opacity
+        });
+      });
+
+      // Validate Form
+      const validateForm = () => {
+        const titleInput = document.getElementById('streaming-edit-title');
+        const imageInput = document.getElementById('streaming-edit-image');
+        const title = titleInput.value;
+
+        if (!title.trim()) {
+          alert('Please enter a Stream Title');
+          return false;
+        }
+
+        if (!editIdInput.value && (!imageInput.files || imageInput.files.length === 0)) {
+          alert('Please select an image for the stream');
+          return false;
+        }
+
+        return true;
+      };
+
+      // Edit button functionality
+      const handleEdit = (e) => {
+        e.preventDefault();
+        const button = e.currentTarget;
+        const section = button.getAttribute('data-section');
+        const row = button.closest('tr');
+        const id = row.getAttribute('data-id');
+        if (section === 'streaming') {
+          const title = row.cells[0].textContent;
+          const imageSrc = row.getAttribute('data-image');
+          editIdInput.value = id;
+          document.getElementById('streaming-edit-title').value = title;
+          formTitle.textContent = 'Edit Banner';
+          editFormContainer.classList.add('active');
+          tableContainer.classList.add('hidden');
+          console.log('Editing stream:', { id, title, imageSrc });
+        }
+      };
+
+      // Update edit buttons
+      const updateEditButtons = () => {
+        const editButtons = document.querySelectorAll('.edit-btn');
+        editButtons.forEach(button => {
+          button.removeEventListener('click', handleEdit);
+          button.addEventListener('click', handleEdit);
+        });
+      };
+
+      updateEditButtons();
+
+      // Delete button functionality
+      const updateDeleteButtons = () => {
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+          button.removeEventListener('click', handleDelete);
+          button.addEventListener('click', handleDelete);
+        });
+      };
+
+      const handleDelete = (e) => {
+        e.preventDefault();
+        const row = e.currentTarget.closest('tr');
+        const title = row.cells[0].textContent;
+        if (confirm(`Are you sure you want to delete the stream "${title}"?`)) {
+          row.remove();
+          console.log('Deleted stream:', title);
+        }
+      };
+
+      updateDeleteButtons();
+
+      // Form submission (for both edit and add)
+      editForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        const id = editIdInput.value;
+        const title = document.getElementById('streaming-edit-title').value;
+        const imageInput = document.getElementById('streaming-edit-image');
+        const imageFile = imageInput.files[0];
+
+        console.log('Form submitted:', { id, title, hasImage: !!imageFile });
+
+        const updateTable = (imageSrc) => {
+          if (id) {
+            // Edit existing stream
+            const row = document.querySelector(`tr[data-id="${id}"]`);
+            if (row) {
+              row.cells[0].textContent = title;
+              row.cells[1].innerHTML = `<img src="${imageSrc}" alt="${title}" onerror="this.src='https://via.placeholder.com/100?text=Image+Not+Found'">`;
+              row.setAttribute('data-image', imageSrc);
+              console.log('Updated stream:', { id, title, imageSrc });
+            }
+          } else {
+            // Add new stream
+            const newId = `stream-${Date.now()}`;
+            const newRow = document.createElement('tr');
+            newRow.setAttribute('data-id', newId);
+            newRow.setAttribute('data-image', imageSrc);
+            newRow.innerHTML = `
+              <td>${title}</td>
+              <td><img src="${imageSrc}" alt="${title}" onerror="this.src='https://via.placeholder.com/100?text=Image+Not+Found'"></td>
+              <td>
+                <a href="#" class="btn btn-primary btn-sm edit-btn" data-section="streaming">Edit</a>
+                <a href="#" class="btn btn-danger btn-sm delete-btn">Delete</a>
+              </td>
+            `;
+            tableBody.appendChild(newRow);
+            updateEditButtons();
+            updateDeleteButtons();
+            console.log('Added new stream:', { id: newId, title, imageSrc });
+          }
+
+          editFormContainer.classList.remove('active');
+          tableContainer.classList.remove('hidden');
+          editForm.reset();
+          editIdInput.value = '';
+          formTitle.textContent = 'Add New Banner';
+        };
+
+        if (imageFile) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const imageSrc = e.target.result;
+            updateTable(imageSrc);
+          };
+          reader.onerror = (e) => {
+            console.error('Error reading image file:', e);
+            alert('Failed to read the image file. Please try again.');
+          };
+          reader.readAsDataURL(imageFile);
+        } else if (id) {
+          // If editing and no new image, retain existing image
+          const row = document.querySelector(`tr[data-id="${id}"]`);
+          if (row) {
+            updateTable(row.getAttribute('data-image'));
+          }
+        }
+      });
+
+      // Cancel edit/add
+      window.cancelEdit = function(section) {
+        const formContainer = document.getElementById(`${section}-edit-form-container`);
+        const tableContainer = document.getElementById(`${section}-table-container`);
+        const form = document.getElementById(`${section}-edit-form`);
+        const formTitle = document.getElementById('streaming-form-title');
+        if (formContainer && tableContainer && form && formTitle) {
+          formContainer.classList.remove('active');
+          tableContainer.classList.remove('hidden');
+          form.reset();
+          document.getElementById('streaming-edit-id').value = '';
+          formTitle.textContent = 'Add New Banner';
+          console.log('Cancelled edit/add for section:', section);
+        }
+      };
+
+      // Add New Stream button
+      addStreamButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        editIdInput.value = '';
+        formTitle.textContent = 'Add New Banner';
+        editFormContainer.classList.add('active');
+        tableContainer.classList.add('hidden');
+        console.log('Opened add new Banner form');
+      });
     });
   </script>
 </body>

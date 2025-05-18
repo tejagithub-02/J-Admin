@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JRSM Admin - Feedback Management</title>
+  <title>JRSM Admin Dashboard - Publications Management</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&family=Dancing+Script:wght@700&family=Georgia&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -22,9 +22,6 @@
       overflow-x: hidden;
     }
     .theme-blue { background: linear-gradient(to right, #1e3a8a, #3b82f6); }
-    .theme-purity { background: linear-gradient(to right, #ff6f00, #fb923c); }
-    .theme-prosperity { background: linear-gradient(to right, #b45309, #facc15); }
-    .theme-harmony { background: linear-gradient(to right, #166534, #4ade80); }
     #topbar {
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -35,14 +32,6 @@
     #topbar h1 {
       font-family: 'Georgia', serif;
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-    }
-    #topbar select {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      transition: background 0.3s;
-    }
-    #topbar select:hover {
-      background: rgba(255, 255, 255, 0.2);
     }
     #topbar img {
       filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
@@ -165,149 +154,32 @@
     .main-content.collapsed {
       margin-left: 60px;
     }
-    .section {
-      flex: 1 0 auto;
+    .publications-section .section-container {
+      background: linear-gradient(to bottom right, #f8f9fa, #e6e6e6);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      border: 1px solid #facc15;
+      font-family: 'Georgia', serif;
     }
-    .stats-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
+    .upload-form {
       margin-bottom: 30px;
+      max-width: 500px;
     }
-    .card {
-      background: #f8f9fa;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      border: 1px solid transparent;
-      background-image: linear-gradient(to bottom right, #0066cc 0%, #d4a017 100%);
-      background-origin: border-box;
-      background-clip: padding-box, border-box;
-      transition: transform 0.3s;
-    }
-    .card:hover {
-      transform: scale(1.03);
-    }
-    .card h4 {
-      color: #1a2b4c;
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-    }
-    .card p {
-      font-size: 1.5rem;
-      color: #333;
-    }
-    .seva-section .section-container {
-      background: linear-gradient(to bottom right, #f8f9fa, #e6e6e6);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-      border: 1px solid #facc15;
-      font-family: 'Georgia', serif;
-    }
-    .event-section .section-container {
-      background: linear-gradient(to bottom right, #f7fafc, #e2e8f0);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-      border: 1px solid #ecc94b;
-      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-    }
-    .feedback-section .section-container {
-      background: linear-gradient(to bottom right, #f7fafc, #edf2f7);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-      border: 1px solid #d69e2e;
-      font-family: 'Garamond', serif;
-    }
-    .streaming-section .section-container {
-      background: linear-gradient(to bottom right, #f7fafc, #e6e6e6);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-      border: 1px solid #ecc94b;
-      font-family: 'Times New Roman', Times, serif;
-    }
-    .ads-section .section-container {
-      background: linear-gradient(to bottom right, #f7fafc, #e6e6e6);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-      border: 1px solid #d69e2e;
-      font-family: 'Bookman Old Style', serif;
-    }
-    .edit-profile-section .section-container,
-    .change-password-section .section-container,
-    .sign-out-section .section-container {
-      background: linear-gradient(to bottom right, #f8f9fa, #e6e6e6);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-      border: 1px solid #facc15;
-      font-family: 'Georgia', serif;
-    }
-    .section-container h3 {
-      margin-bottom: 20px;
-      font-size: 1.6rem;
-    }
-    .section-container table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #fff;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .section-container th, .section-container td {
-      padding: 14px;
-      text-align: left;
-      border-bottom: 1px solid #e2e8f0;
-      font-size: 1.1rem;
-    }
-    .section-container th {
-      background: linear-gradient(to right, #2c5282, #4a90e2);
-      color: #fff;
-    }
-    .section-container td {
-      color: #333;
-    }
-    .section-container p {
-      font-size: 1.2rem;
-      color: #333;
-      margin-bottom: 20px;
-    }
-    .section-container form {
+    .upload-form form {
       display: flex;
       flex-direction: column;
       gap: 15px;
-      max-width: 500px;
     }
-    .section-container form label {
-      font-size: 1.1rem;
-      color: #333;
-    }
-    .section-container form input,
-    .section-container form textarea {
+    .upload-form input,
+    .upload-form select {
       padding: 10px;
       border: 1px solid #e2e8f0;
       border-radius: 5px;
       font-size: 1rem;
-      width: 100%;
     }
-    .section-container form input[type="file"] {
+    .upload-form input[type="file"] {
       padding: 3px;
-    }
-    .edit-form-container {
-      margin-top: 20px;
-      padding: 20px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      display: none;
-    }
-    .edit-form-container.active {
-      display: block;
     }
     .btn {
       padding: 10px 18px;
@@ -318,10 +190,6 @@
       transition: transform 0.2s, box-shadow 0.2s;
       font-size: 1rem;
     }
-    .btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    }
     .btn-primary {
       background: #2c5282;
       color: #fff;
@@ -331,24 +199,29 @@
       background: #1a4066;
     }
     .btn-danger {
-      background: #e53e3e;
+      background: #dc3545;
       color: #fff;
       border: none;
     }
     .btn-danger:hover {
-      background: #c53030;
+      background: #b02a37;
     }
-    .btn-success {
-      background: #ed8936;
-      color: #fff;
+    .btn-warning {
+      background: #ffc107;
+      color: #333;
       border: none;
     }
-    .btn-success:hover {
-      background: #d6691e;
+    .btn-warning:hover {
+      background: #e0a800;
     }
-    .btn-sm {
-      padding: 6px 12px;
+    .main-footer {
+      text-align: center;
+      padding: 10px 20px;
+      color: #666;
       font-size: 0.9rem;
+      border-top: 1px solid #e2e8f0;
+      width: 100%;
+      margin-top: auto;
     }
     .menu-toggle {
       display: none;
@@ -364,32 +237,18 @@
       cursor: pointer;
       padding: 0.5rem;
     }
-    .main-footer {
+    .publications-title {
+      font-size: 1.8em;
+      color: #b71c1c;
+      margin-bottom: 15px;
+      font-weight: bold;
       text-align: center;
-      padding: 10px 20px;
-      color: #666;
-      font-size: 0.9rem;
-      border-top: 1px solid #e2e8f0;
-      width: 100%;
-      margin-top: auto;
+      font-family: 'Raleway', sans-serif;
     }
-    #seva-table-container,
-    #event-table-container,
-    #ads-table-container,
-    #streaming-table-container {
-      transition: opacity 0.3s ease;
-    }
-    #seva-table-container[style*="display: none"],
-    #event-table-container[style*="display: none"],
-    #ads-table-container[style*="display: none"],
-    #streaming-table-container[style*="display: none"] {
-      opacity: 0;
-    }
-    #seva-table-container,
-    #event-table-container,
-    #ads-table-container,
-    #streaming-table-container {
-      opacity: 1;
+    .button-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
     @media (min-width: 769px) {
       .sidebar-toggle {
@@ -400,7 +259,6 @@
       #topbar h1 { font-size: 1.2rem; }
       #topbar img { width: 50px; height: 50px; }
       #topbar .admin-icon { font-size: 2.25rem; }
-      #topbar select { font-size: 0.875rem; padding: 0.25rem 0.5rem; }
       .dashboard-container { flex-direction: column; }
       .sidebar {
         width: 250px;
@@ -439,8 +297,6 @@
       .main-content.collapsed {
         margin-left: 0;
       }
-      .section-container { padding: 20px; }
-      .stats-cards { grid-template-columns: 1fr; }
       .menu-toggle {
         display: block;
       }
@@ -450,24 +306,21 @@
       .admin-dropdown {
         right: 10px;
       }
+      .publications-title {
+        font-size: 1.5em;
+      }
     }
     @media (max-width: 480px) {
       #topbar { padding: 8px; }
       #topbar img { width: 45px; height: 45px; }
       #topbar .admin-icon { font-size: 1.5rem; }
-      #topbar select { font-size: 0.75rem; padding: 0.2rem 0.4rem; }
       .main-content { padding: 15px; }
       .section-container { padding: 15px; }
       .section-container h3 { font-size: 1.3rem; }
-      .section-container th, .section-container td { padding: 10px; font-size: 0.95rem; }
-      .section-container p { font-size: 1rem; }
       .btn { padding: 8px 14px; font-size: 0.9rem; }
-      .btn-sm { padding: 5px 10px; font-size: 0.85rem; }
       .sidebar { padding: 15px; }
       .sidebar h3 { font-size: 1.2rem; }
       .sidebar a { font-size: 0.9rem; padding: 8px; }
-      .card h4 { font-size: 1rem; }
-      .card p { font-size: 1.2rem; }
     }
   </style>
 </head>
@@ -476,10 +329,9 @@
   <nav id="topbar" class="theme-blue text-white p-4 flex justify-between items-center sticky top-0 z-10 w-full">
     <div class="flex items-center space-x-4">
       <i class="fas fa-bars sidebar-toggle" id="sidebar-toggle"></i>
-      <i class="fas fa-bars menu-toggle"></i>
+      <i class="fas fa-bars menu-toggle" id="menu-toggle"></i>
       <img src="images/logo.png" alt="Rama Logo" class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16">
       <h1 class="text-xl font-bold">SJRSM</h1>
-     
     </div>
     <div class="flex items-center space-x-4">
       <div class="relative">
@@ -500,41 +352,34 @@
       <a href="index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
       <a href="seva.html"><i class="fas fa-pray"></i> <span>Seva Management</span></a>
       <a href="events.html"><i class="fas fa-calendar-alt"></i> <span>Events</span></a>
-      <a href="#" class="active"><i class="fas fa-comment"></i> <span>Feedback</span></a>
       <a href="live.html"><i class="fas fa-video"></i> <span>Live Streaming</span></a>
-      <a href="Advertisement.html"><i class="fas fa-ad"></i> <span>Add Banner</span></a>
-      <a href="gallery-upload.html" ><i class="fas fa-image"></i> <span>Gallery</span></a>
-     
+      <a href="Advertisement.html"><i class="fas fa-ad"></i> <span>Add Advertisement</span></a>
+      <a href="Banner.html"><i class="fas fa-ad"></i> <span>Add Banner</span></a>
+      <a href="gallery-upload.html"><i class="fas fa-image"></i> <span>Gallery</span></a>
+      <a href="publications.html" class="active"><i class="fas fa-file-pdf"></i> <span>Add Publications</span></a>
       <a href="password.html"><i class="fas fa-key"></i> <span>Change Password</span></a>
       <a href="#" id="sidebar-sign-out"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
     </div>
 
-    <!-- Feedback Management Section -->
+    <!-- Publications Management Section -->
     <div class="main-content">
-      <div id="feedback-section" class="section feedback-section">
+      <div id="publications-section" class="section publications-section">
         <div class="section-container">
-          <h3>Feedback Management</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>SI.NO</th>
-                <th>Devotee</th>
-                <th>Feedback</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Ramesh K</td>
-                <td>Great seva booking experience!</td>
-                <td>
-                  <a href="#" class="btn btn-primary btn-sm">Reply</a>
-                  <a href="#" class="btn btn-danger btn-sm">Archive</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <h3 class="publications-title">Publications Management</h3>
+          <div class="upload-form">
+            <form id="publication-upload-form">
+              <label for="publication-title">Publication Title</label>
+              <input type="text" id="publication-title" name="title" required>
+              <label for="publication-file">Upload PDF</label>
+              <input type="file" id="publication-file" name="pdf" accept="application/pdf" required>
+              <div class="button-group">
+                <button type="button" class="btn btn-primary" id="add-btn">Add Publication</button>
+                <button type="button" class="btn btn-warning" id="edit-btn">Edit Publication</button>
+                <button type="button" class="btn btn-danger" id="delete-btn">Delete Publication</button>
+              </div>
+             
+            </form>
+          </div>
         </div>
       </div>
 
@@ -589,32 +434,157 @@
         });
       }
 
-      
+      // Dynamic Publications Management
+      const uploadForm = document.getElementById('publication-upload-form');
+      const publicationSelect = document.getElementById('publication-select');
+      const addBtn = document.getElementById('add-btn');
+      const editBtn = document.getElementById('edit-btn');
+      const deleteBtn = document.getElementById('delete-btn');
+      const titleInput = document.getElementById('publication-title');
+      const fileInput = document.getElementById('publication-file');
 
-      // Feedback button functionality
-      const replyButtons = document.querySelectorAll('.btn-primary.btn-sm');
-      const archiveButtons = document.querySelectorAll('.btn-danger.btn-sm');
+      // Sample initial publications
+      let publications = [
+        { id: 1, title: 'Abhirama 1992', pdfUrl: 'pdf/abhirama1992.pdf' },
+        { id: 2, title: 'Baaligondu Belaku', pdfUrl: 'pdf/baaligondu.pdf' },
+        { id: 3, title: 'Jayarama 1989', pdfUrl: 'pdf/jayarama1989.pdf' },
+      ];
 
-      replyButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-          e.preventDefault();
-          const row = button.closest('tr');
-          const devotee = row.cells[0].textContent;
-          alert(`Replying to feedback from ${devotee}`);
-          // Add reply functionality here (e.g., open a form or send to backend)
+      // Function to render publication options in the select dropdown
+      function renderPublications() {
+        publicationSelect.innerHTML = '<option value="">-- Select a Publication --</option>';
+        publications.forEach(pub => {
+          const option = document.createElement('option');
+          option.value = pub.id;
+          option.textContent = pub.title;
+          publicationSelect.appendChild(option);
         });
-      });
+      }
 
-      archiveButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
+      // Validate form inputs
+      function validateForm() {
+        const title = titleInput.value.trim();
+        const file = fileInput.files[0];
+
+        if (!title) {
+          alert('Please enter a publication title.');
+          return false;
+        }
+
+        if (!file || !file.type.includes('pdf')) {
+          alert('Please upload a valid PDF file.');
+          return false;
+        }
+
+        return true;
+      }
+
+      // Check for duplicate titles
+      function isDuplicateTitle(title, excludeId = null) {
+        return publications.some(pub => pub.title.toLowerCase() === title.toLowerCase() && pub.id !== excludeId);
+      }
+
+      // Initial render
+      renderPublications();
+
+      // Handle Add Publication
+      if (addBtn) {
+        addBtn.addEventListener('click', (e) => {
           e.preventDefault();
-          const row = button.closest('tr');
-          const devotee = row.cells[0].textContent;
-          if (confirm(`Are you sure you want to archive feedback from ${devotee}?`)) {
-            row.remove();
-            // Add archive functionality here (e.g., update backend)
+
+          if (!validateForm()) return;
+
+          const title = titleInput.value.trim();
+          const file = fileInput.files[0];
+
+          if (isDuplicateTitle(title)) {
+            alert('A publication with this title already exists. Please choose a different title.');
+            return;
+          }
+
+          // Simulate file upload and get URL (replace with actual backend upload)
+          const pdfUrl = `pdf/${file.name}`;
+
+          // Add new publication
+          const newId = publications.length ? Math.max(...publications.map(p => p.id)) + 1 : 1;
+          publications.push({ id: newId, title, pdfUrl });
+          alert(`Publication "${title}" added successfully (backend integration needed).`);
+
+          uploadForm.reset();
+          renderPublications();
+        });
+      }
+
+      // Handle Edit Publication
+      if (editBtn) {
+        editBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+
+          const selectedId = parseInt(publicationSelect.value);
+          if (!selectedId) {
+            alert('Please select a publication to edit.');
+            return;
+          }
+
+          if (!validateForm()) return;
+
+          const title = titleInput.value.trim();
+          const file = fileInput.files[0];
+
+          if (isDuplicateTitle(title, selectedId)) {
+            alert('A publication with this title already exists. Please choose a different title.');
+            return;
+          }
+
+          // Simulate file upload and get URL (replace with actual backend upload)
+          const pdfUrl = `pdf/${file.name}`;
+
+          // Update existing publication
+          const index = publications.findIndex(p => p.id === selectedId);
+          if (index !== -1) {
+            publications[index] = { id: selectedId, title, pdfUrl };
+            alert(`Publication "${title}" updated successfully (backend integration needed).`);
+            uploadForm.reset();
+            renderPublications();
           }
         });
+      }
+
+      // Handle Delete Publication
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+
+          const selectedId = parseInt(publicationSelect.value);
+          if (!selectedId) {
+            alert('Please select a publication to delete.');
+            return;
+          }
+
+          const pub = publications.find(p => p.id === selectedId);
+          if (confirm(`Are you sure you want to delete the publication "${pub.title}"?`)) {
+            publications = publications.filter(p => p.id !== selectedId);
+            alert(`Publication "${pub.title}" deleted successfully (backend integration needed).`);
+            uploadForm.reset();
+            renderPublications();
+          }
+        });
+      }
+
+      // Populate form fields when a publication is selected for editing
+      publicationSelect.addEventListener('change', (e) => {
+        const selectedId = parseInt(e.target.value);
+        if (selectedId) {
+          const pub = publications.find(p => p.id === selectedId);
+          if (pub) {
+            titleInput.value = pub.title;
+            // Note: File input cannot be pre-filled due to security restrictions
+            // User must re-upload the PDF
+            fileInput.value = ''; // Clear file input
+          }
+        } else {
+          uploadForm.reset();
+        }
       });
     });
   </script>
