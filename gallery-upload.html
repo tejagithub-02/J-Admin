@@ -126,6 +126,8 @@
       background: linear-gradient(to right, #007bff, #e6b800);
       color: #fff;
       font-weight: bold;
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+      transform: scale(1.05);
     }
     .sidebar a i {
       margin-right: 10px;
@@ -169,9 +171,22 @@
       background: linear-gradient(to bottom right, #f8f9fa, #e6e6e6);
       padding: 25px;
       border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-      border: 1px solid #facc15;
-      font-family: 'Georgia', serif;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 0 10px rgba(250, 204, 21, 0.5);
+      border: 2px solid #facc15;
+      animation: pulse 2s infinite;
+    }
+    .gallery-upload-section .section-container h3 {
+      font-family: 'Arial', sans-serif; /* Use default font */
+      font-weight: bold; /* Ensure bold */
+      font-size: 2rem; /* Default h1 size */
+      margin-bottom: 1rem;
+      color: #333; /* Match body text color */
+      text-shadow: none; /* Remove any text shadow */
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 0 10px rgba(250, 204, 21, 0.5); }
+      50% { box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 0 15px rgba(250, 204, 21, 0.7); }
+      100% { box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 0 10px rgba(250, 204, 21, 0.5); }
     }
     .upload-form {
       margin-bottom: 30px;
@@ -192,6 +207,12 @@
     .upload-form input[type="file"] {
       padding: 3px;
     }
+    .upload-form img#image-preview {
+      max-width: 200px;
+      margin-top: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
     .btn {
       padding: 10px 18px;
       border-radius: 6px;
@@ -205,9 +226,27 @@
       background: #2c5282;
       color: #fff;
       border: none;
+      position: relative;
+      overflow: hidden;
     }
     .btn-primary:hover {
       background: #1a4066;
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.5s, height 0.5s;
+    }
+    .btn-primary:hover::after {
+      width: 200px;
+      height: 200px;
     }
     .main-footer {
       text-align: center;
@@ -245,7 +284,7 @@
       .dashboard-container { flex-direction: column; }
       .sidebar {
         width: 250px;
-        border-right: none;
+      border-right: none;
         border-bottom: 1px solid #0066cc;
         position: fixed;
         top: 90px;
@@ -313,7 +352,6 @@
       <i class="fas fa-bars menu-toggle" id="menu-toggle"></i>
       <img src="images/logo.png" alt="Rama Logo" class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16">
       <h1 class="text-xl font-bold">SJRSM</h1>
-      
     </div>
     <div class="flex items-center space-x-4">
       <div class="relative">
@@ -334,12 +372,11 @@
       <a href="index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
       <a href="seva.html"><i class="fas fa-pray"></i> <span>Seva Management</span></a>
       <a href="events.html"><i class="fas fa-calendar-alt"></i> <span>Events</span></a>
-    
       <a href="live.html"><i class="fas fa-video"></i> <span>Live Streaming</span></a>
       <a href="Advertisement.html"><i class="fas fa-ad"></i> <span>Add Advertisement</span></a>
       <a href="Banner.html"><i class="fas fa-ad"></i> <span>Add Banner</span></a>
       <a href="gallery-upload.html" class="active"><i class="fas fa-image"></i> <span>Gallery</span></a>
-      <a href="publications.html" ><i class="fas fa-file-pdf"></i> <span>Add Publications</span></a>
+      <a href="publications.html"><i class="fas fa-file-pdf"></i> <span>Add Publications</span></a>
       <a href="password.html"><i class="fas fa-key"></i> <span>Change Password</span></a>
       <a href="#" id="sidebar-sign-out"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
     </div>
@@ -412,13 +449,71 @@
         });
       }
 
-      // Gallery upload form submission
+      // Gallery upload form functionality
       const uploadForm = document.getElementById('gallery-upload-form');
+      const fileInput = document.getElementById('image-file');
+
+      // Image preview
+      if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              const imgPreview = document.createElement('img');
+              imgPreview.src = event.target.result;
+              imgPreview.id = 'image-preview';
+              imgPreview.style.maxWidth = '200px';
+              imgPreview.style.marginTop = '10px';
+              imgPreview.style.borderRadius = '5px';
+              imgPreview.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.1)';
+              const existingPreview = document.getElementById('image-preview');
+              if (existingPreview) existingPreview.remove();
+              uploadForm.appendChild(imgPreview);
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // Form submission with validation
       if (uploadForm) {
-        uploadForm.addEventListener('submit', (e) => {
+        uploadForm.addEventListener('submit', async (e) => {
           e.preventDefault();
-          alert('Image upload functionality to be implemented');
-          // Add backend integration here
+          const file = fileInput.files[0];
+          const maxSize = 5 * 1024 * 1024; // 5MB
+          const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+          if (!file) {
+            alert('Please select an image.');
+            return;
+          }
+          if (!allowedTypes.includes(file.type)) {
+            alert('Only JPEG, PNG, or GIF files are allowed.');
+            return;
+          }
+          if (file.size > maxSize) {
+            alert('File size exceeds 5MB limit.');
+            return;
+          }
+
+          const formData = new FormData(uploadForm);
+          try {
+            const response = await fetch('/api/upload-gallery-image', {
+              method: 'POST',
+              body: formData,
+            });
+            if (response.ok) {
+              alert('Image uploaded successfully!');
+              uploadForm.reset();
+              const existingPreview = document.getElementById('image-preview');
+              if (existingPreview) existingPreview.remove();
+            } else {
+              alert('Failed to upload image.');
+            }
+          } catch (error) {
+            alert('Error uploading image: ' + error.message);
+          }
         });
       }
     });
