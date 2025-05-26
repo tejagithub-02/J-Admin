@@ -164,22 +164,55 @@
     }
     .upload-form {
       margin-bottom: 30px;
-      max-width: 500px;
+      max-width: 600px;
     }
     .upload-form form {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 120px 1fr;
       gap: 15px;
+      align-items: center;
+    }
+    .upload-form label {
+      text-align: right;
+      font-weight: 600;
+      color: #1a2b4c;
     }
     .upload-form input,
-    .upload-form select {
+    .upload-form select,
+    .upload-form textarea {
       padding: 10px;
       border: 1px solid #e2e8f0;
       border-radius: 5px;
       font-size: 1rem;
+      width: 100%;
     }
     .upload-form input[type="file"] {
-      padding: 3px;
+      padding: 8px 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      background: #fff;
+      height: 40px;
+      line-height: 20px;
+    }
+    .upload-form textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .upload-form .button-group {
+      grid-column: 1 / -1;
+      justify-content: flex-start;
+    }
+    .field-book,
+    .field-article {
+      display: none;
+    }
+    .field-book.active,
+    .field-article.active {
+      display: block;
+    }
+    .field-book.active ~ .field-book,
+    .field-article.active ~ .field-article {
+      display: block;
     }
     .btn {
       padding: 10px 18px;
@@ -309,6 +342,24 @@
       .publications-title {
         font-size: 1.5em;
       }
+      .upload-form form {
+        grid-template-columns: 1fr;
+      }
+      .upload-form label {
+        text-align: left;
+      }
+      .field-book,
+      .field-article {
+        display: none;
+      }
+      .field-book.active,
+      .field-article.active {
+        display: block;
+      }
+      .field-book.active ~ .field-book,
+      .field-article.active ~ .field-article {
+        display: block;
+      }
     }
     @media (max-width: 480px) {
       #topbar { padding: 8px; }
@@ -352,11 +403,14 @@
       <a href="index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
       <a href="seva.html"><i class="fas fa-pray"></i> <span>Seva Management</span></a>
       <a href="events.html"><i class="fas fa-calendar-alt"></i> <span>Events</span></a>
+      <a href="recurring.html"><i class="fas fa-calendar-check"></i> <span>Recurring Events</span></a>
       <a href="live.html"><i class="fas fa-video"></i> <span>Live Streaming</span></a>
       <a href="Advertisement.html"><i class="fas fa-ad"></i> <span>Add Advertisement</span></a>
       <a href="Banner.html"><i class="fas fa-ad"></i> <span>Add Banner</span></a>
+      <a href="card.html"><i class="fas fa-image"></i> <span>Card Management</span></a>
       <a href="gallery-upload.html"><i class="fas fa-image"></i> <span>Gallery</span></a>
-      <a href="publications.html" class="active"><i class="fas fa-file-pdf"></i> <span>Add Publications</span></a>
+      <a href="#" class="active"><i class="fas fa-file-pdf"></i> <span>Add Publications</span></a>
+      <a href="about.html"><i class="fas fa-info-circle"></i> <span>About</span></a>
       <a href="password.html"><i class="fas fa-key"></i> <span>Change Password</span></a>
       <a href="#" id="sidebar-sign-out"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
     </div>
@@ -368,16 +422,28 @@
           <h3 class="publications-title">Publications Management</h3>
           <div class="upload-form">
             <form id="publication-upload-form">
-              <label for="publication-title">Publication Title</label>
-              <input type="text" id="publication-title" name="title" required>
-              <label for="publication-file">Upload PDF</label>
-              <input type="file" id="publication-file" name="pdf" accept="application/pdf" required>
+              <label for="publication-type">Type</label>
+              <select id="publication-type" name="type">
+                <option value="books">Books</option>
+                <option value="articles">Articles</option>
+              </select>
+              <label for="publication-select">Select Item</label>
+              <select id="publication-select" name="publication"></select>
+              <label for="book-title" class="field-book active">Book Title</label>
+              <input type="text" id="book-title" name="title" class="field-book active">
+              <label for="book-description" class="field-book active">Description</label>
+              <textarea id="book-description" name="description" class="field-book active"></textarea>
+              <label for="book-image" class="field-book active">Upload Image</label>
+              <input type="file" id="book-image" name="image" accept="image/jpeg,image/png" class="field-book active">
+              <label for="article-title" class="field-article">Article Title</label>
+              <input type="text" id="article-title" name="title" class="field-article">
+              <label for="article-file" class="field-article">Upload PDF</label>
+              <input type="file" id="article-file" name="pdf" accept="application/pdf" class="field-article">
               <div class="button-group">
-                <button type="button" class="btn btn-primary" id="add-btn">Add Publication</button>
-                <button type="button" class="btn btn-warning" id="edit-btn">Edit Publication</button>
-                <button type="button" class="btn btn-danger" id="delete-btn">Delete Publication</button>
+                <button type="button" class="btn btn-primary" id="add-btn">Add</button>
+                <button type="button" class="btn btn-warning" id="edit-btn">Edit</button>
+                <button type="button" class="btn btn-danger" id="delete-btn">Delete</button>
               </div>
-             
             </form>
           </div>
         </div>
@@ -436,154 +502,232 @@
 
       // Dynamic Publications Management
       const uploadForm = document.getElementById('publication-upload-form');
+      const publicationType = document.getElementById('publication-type');
       const publicationSelect = document.getElementById('publication-select');
-      const addBtn = document.getElementById('add-btn');
-      const editBtn = document.getElementById('edit-btn');
-      const deleteBtn = document.getElementById('delete-btn');
-      const titleInput = document.getElementById('publication-title');
-      const fileInput = document.getElementById('publication-file');
+      const bookTitleInput = document.getElementById('book-title');
+      const bookDescriptionInput = document.getElementById('book-description');
+      const bookImageInput = document.getElementById('book-image');
+      const articleTitleInput = document.getElementById('article-title');
+      const articleFileInput = document.getElementById('article-file');
 
-      // Sample initial publications
-      let publications = [
+      // Sample initial data
+      let books = [
+        { id: 1, title: 'Sri Rama Charita', description: 'A detailed narrative of Lord Rama’s life, exploring his divine qualities and teachings as celebrated at Sri Jayarama Seva Mandali.', imageUrl: 'images/devudu ramayana.jpg' },
+        { id: 2, title: 'Devotion in Practice', description: 'An insightful guide to the rituals and seva practices performed at Sri Jayarama Seva Mandali, with practical advice for devotees.', imageUrl: 'images/chitramanjari.jpg' },
+        { id: 3, title: 'KeertanegaLu', description: 'A comprehensive overview of the annual festivals and poojas at Sri Jayarama Seva Mandali, including their spiritual significance.', imageUrl: 'images/keertanegaLu.jpg' },
+        { id: 4, title: 'Ramayana for Today', description: 'A modern interpretation of the Ramayana, highlighting its relevance to contemporary life and spiritual practice.', imageUrl: 'images/ramayana stotragaLu.jpg' },
+      ];
+      let articles = [
         { id: 1, title: 'Abhirama 1992', pdfUrl: 'pdf/abhirama1992.pdf' },
         { id: 2, title: 'Baaligondu Belaku', pdfUrl: 'pdf/baaligondu.pdf' },
         { id: 3, title: 'Jayarama 1989', pdfUrl: 'pdf/jayarama1989.pdf' },
       ];
 
-      // Function to render publication options in the select dropdown
+      // Function to render select dropdown
       function renderPublications() {
-        publicationSelect.innerHTML = '<option value="">-- Select a Publication --</option>';
-        publications.forEach(pub => {
+        const type = publicationType.value;
+        publicationSelect.innerHTML = '<option value="">-- Select an Item --</option>';
+        const items = type === 'books' ? books : articles;
+        items.forEach(item => {
           const option = document.createElement('option');
-          option.value = pub.id;
-          option.textContent = pub.title;
+          option.value = item.id;
+          option.textContent = item.title;
           publicationSelect.appendChild(option);
         });
       }
 
       // Validate form inputs
       function validateForm() {
-        const title = titleInput.value.trim();
-        const file = fileInput.files[0];
+        const type = publicationType.value;
+        if (type === 'books') {
+          const title = bookTitleInput.value.trim();
+          const description = bookDescriptionInput.value.trim();
+          const image = bookImageInput.files[0];
 
-        if (!title) {
-          alert('Please enter a publication title.');
-          return false;
+          if (!title) {
+            alert('Please enter a book title.');
+            return false;
+          }
+          if (!description) {
+            alert('Please enter a description.');
+            return false;
+          }
+          if (image && !image.type.includes('image')) {
+            alert('Please upload a valid image file (JPEG or PNG).');
+            return false;
+          }
+        } else {
+          const title = articleTitleInput.value.trim();
+          const file = articleFileInput.files[0];
+
+          if (!title) {
+            alert('Please enter an article title.');
+            return false;
+          }
+          if (file && !file.type.includes('pdf')) {
+            alert('Please upload a valid PDF file.');
+            return false;
+          }
         }
-
-        if (!file || !file.type.includes('pdf')) {
-          alert('Please upload a valid PDF file.');
-          return false;
-        }
-
         return true;
       }
 
       // Check for duplicate titles
-      function isDuplicateTitle(title, excludeId = null) {
-        return publications.some(pub => pub.title.toLowerCase() === title.toLowerCase() && pub.id !== excludeId);
+      function isDuplicateTitle(type, title, excludeId = null) {
+        const items = type === 'books' ? books : articles;
+        return items.some(item => item.title.toLowerCase() === title.toLowerCase() && item.id !== excludeId);
       }
 
-      // Initial render
+      // Initialize form - Show books fields by default and hide articles fields
       renderPublications();
 
-      // Handle Add Publication
-      if (addBtn) {
-        addBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-
-          if (!validateForm()) return;
-
-          const title = titleInput.value.trim();
-          const file = fileInput.files[0];
-
-          if (isDuplicateTitle(title)) {
-            alert('A publication with this title already exists. Please choose a different title.');
-            return;
-          }
-
-          // Simulate file upload and get URL (replace with actual backend upload)
-          const pdfUrl = `pdf/${file.name}`;
-
-          // Add new publication
-          const newId = publications.length ? Math.max(...publications.map(p => p.id)) + 1 : 1;
-          publications.push({ id: newId, title, pdfUrl });
-          alert(`Publication "${title}" added successfully (backend integration needed).`);
-
-          uploadForm.reset();
+      // Handle type change - only update visibility when actually changed
+      let currentType = publicationType.value;
+      publicationType.addEventListener('change', () => {
+        const newType = publicationType.value;
+        if (newType !== currentType) {
+          document.querySelectorAll('.field-book').forEach(field => {
+            field.classList.toggle('active', newType === 'books');
+          });
+          document.querySelectorAll('.field-article').forEach(field => {
+            field.classList.toggle('active', newType === 'articles');
+          });
           renderPublications();
-        });
-      }
+          uploadForm.reset();
+          currentType = newType;
+        }
+      });
 
-      // Handle Edit Publication
-      if (editBtn) {
-        editBtn.addEventListener('click', (e) => {
-          e.preventDefault();
+      // Handle Add
+      addBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!validateForm()) return;
 
-          const selectedId = parseInt(publicationSelect.value);
-          if (!selectedId) {
-            alert('Please select a publication to edit.');
+        const type = publicationType.value;
+        if (type === 'books') {
+          const title = bookTitleInput.value.trim();
+          const description = bookDescriptionInput.value.trim();
+          const image = bookImageInput.files[0];
+
+          if (isDuplicateTitle('books', title)) {
+            alert('A book with this title already exists.');
             return;
           }
 
-          if (!validateForm()) return;
+          const imageUrl = image ? `images/${image.name}` : 'images/default-book.jpg'; // Simulate upload
+          const newId = books.length ? Math.max(...books.map(b => b.id)) + 1 : 1;
+          books.push({ id: newId, title, description, imageUrl });
+          alert(`Book "${title}" added successfully (backend integration needed).`);
+        } else {
+          const title = articleTitleInput.value.trim();
+          const file = articleFileInput.files[0];
 
-          const title = titleInput.value.trim();
-          const file = fileInput.files[0];
-
-          if (isDuplicateTitle(title, selectedId)) {
-            alert('A publication with this title already exists. Please choose a different title.');
+          if (isDuplicateTitle('articles', title)) {
+            alert('An article with this title already exists.');
             return;
           }
 
-          // Simulate file upload and get URL (replace with actual backend upload)
-          const pdfUrl = `pdf/${file.name}`;
+          const pdfUrl = file ? `pdf/${file.name}` : articles[0].pdfUrl; // Simulate upload
+          const newId = articles.length ? Math.max(...articles.map(a => a.id)) + 1 : 1;
+          articles.push({ id: newId, title, pdfUrl });
+          alert(`Article "${title}" added successfully (backend integration needed).`);
+        }
 
-          // Update existing publication
-          const index = publications.findIndex(p => p.id === selectedId);
+        uploadForm.reset();
+        renderPublications();
+      });
+
+      // Handle Edit
+      editBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const selectedId = parseInt(publicationSelect.value);
+        if (!selectedId) {
+          alert('Please select an item to edit.');
+          return;
+        }
+        if (!validateForm()) return;
+
+        const type = publicationType.value;
+        if (type === 'books') {
+          const title = bookTitleInput.value.trim();
+          const description = bookDescriptionInput.value.trim();
+          const image = bookImageInput.files[0];
+
+          if (isDuplicateTitle('books', title, selectedId)) {
+            alert('A book with this title already exists.');
+            return;
+          }
+
+          const imageUrl = image ? `images/${image.name}` : books.find(b => b.id === selectedId).imageUrl;
+          const index = books.findIndex(b => b.id === selectedId);
           if (index !== -1) {
-            publications[index] = { id: selectedId, title, pdfUrl };
-            alert(`Publication "${title}" updated successfully (backend integration needed).`);
-            uploadForm.reset();
-            renderPublications();
-          }
-        });
-      }
-
-      // Handle Delete Publication
-      if (deleteBtn) {
-        deleteBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-
-          const selectedId = parseInt(publicationSelect.value);
-          if (!selectedId) {
-            alert('Please select a publication to delete.');
-            return;
-          }
-
-          const pub = publications.find(p => p.id === selectedId);
-          if (confirm(`Are you sure you want to delete the publication "${pub.title}"?`)) {
-            publications = publications.filter(p => p.id !== selectedId);
-            alert(`Publication "${pub.title}" deleted successfully (backend integration needed).`);
-            uploadForm.reset();
-            renderPublications();
-          }
-        });
-      }
-
-      // Populate form fields when a publication is selected for editing
-      publicationSelect.addEventListener('change', (e) => {
-        const selectedId = parseInt(e.target.value);
-        if (selectedId) {
-          const pub = publications.find(p => p.id === selectedId);
-          if (pub) {
-            titleInput.value = pub.title;
-            // Note: File input cannot be pre-filled due to security restrictions
-            // User must re-upload the PDF
-            fileInput.value = ''; // Clear file input
+            books[index] = { id: newId, title, description, imageUrl };
+            alert(`Book "${title}" updated successfully (backend integration needed).`);
           }
         } else {
+          const title = articleTitleInput.value.trim();
+          const file = articleFileInput.files[0];
+
+          if (isDuplicateTitle('articles', title, selectedId)) {
+            alert('An article with this title already exists.');
+            return;
+          }
+
+          const pdfUrl = file ? `pdf/${file.name}` : articles.find(a => a.id === selectedId).pdfUrl;
+          const index = articles.findIndex(a => a.id === selectedId);
+          if (index !== -1) {
+            articles[index] = { id: newId, title, pdfUrl };
+            alert(`Article "${title}" updated successfully (backend integration needed).`);
+          }
+        }
+
+        uploadForm.reset();
+        renderPublications();
+      });
+
+      // Handle Delete
+      deleteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const selectedId = parseInt(publicationSelect.value);
+        if (!selectedId) {
+          alert('Please select an item to delete.');
+          return;
+        }
+
+        const type = publicationType.value;
+        const items = type === 'books' ? books : articles;
+        const item = items.find(i => i.id === selectedId);
+        if (confirm(`Are you sure you want to delete "${item.title}"?`)) {
+          if (type === 'books') {
+            books = books.filter(b => b.id !== selectedId);
+          } else {
+            articles = articles.filter(a => a.id !== selectedId);
+          }
+          alert(`"${item.title}" deleted successfully (backend integration needed).`);
           uploadForm.reset();
+          renderPublications();
+        }
+      });
+
+      // Populate form on select
+      publicationSelect.addEventListener('change', (e) => {
+        const selectedId = parseInt(e.target.value);
+        const type = publicationType.value;
+        uploadForm.reset();
+
+        if (selectedId) {
+          const items = type === 'books' ? books : articles;
+          const item = items.find(i => i.id === selectedId);
+          if (item) {
+            if (type === 'books') {
+              bookTitleInput.value = item.title;
+              bookDescriptionInput.value = item.description;
+              // Image input cannot be pre-filled due to security restrictions
+            } else {
+              articleTitleInput.value = item.title;
+              // PDF input cannot be pre-filled
+            }
+          }
         }
       });
     });
