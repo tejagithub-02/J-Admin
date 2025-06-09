@@ -264,6 +264,20 @@
     .section-container form input[type="file"] {
       padding: 3px;
     }
+    .section-container form input[type="date"] {
+      padding: 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      font-size: 1rem;
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+    .section-container form input[type="date"]::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      padding: 5px;
+    }
     .edit-form-container {
       margin-top: 20px;
       padding: 20px;
@@ -544,7 +558,7 @@
       <i class="fas fa-bars sidebar-toggle" id="sidebar-toggle"></i>
       <i class="fas fa-bars menu-toggle" id="menu-toggle"></i>
       <img src="images/logo.png" alt="Rama Logo" class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16">
-      <h1 class="text-xl font-bold">SJRSM</h1>
+      <h1 class="text-xl font-bold">Sri JayaRama Seva Mandali</h1>
     </div>
     <div class="flex items-center space-x-4">
       <div class="relative">
@@ -604,7 +618,7 @@
                 <label>Dates</label>
                 <div id="dates-container">
                   <div class="date-group">
-                    <input type="text" name="event-date" class="form-control" placeholder="DD-MM-YYYY" required>
+                    <input type="date" name="event-date" class="form-control" required>
                     <button type="button" class="remove-date-btn"><i class="fas fa-trash"></i></button>
                   </div>
                 </div>
@@ -665,6 +679,20 @@
       let existingImages = [];
       let newFiles = [];
 
+      // Function to format date from YYYY-MM-DD to MM/DD/YYYY
+      function formatDateToDisplay(dateString) {
+        if (!dateString) return '';
+        const [year, month, day] = dateString.split('-');
+        return `${month}/${day}/${year}`;
+      }
+
+      // Function to format date from MM/DD/YYYY to YYYY-MM-DD for input value
+      function formatDateForInput(dateString) {
+        if (!dateString) return '';
+        const [month, day, year] = dateString.split('/');
+        return `${year}-${month}-${day}`;
+      }
+
       // Load events from localStorage
       function loadEvents() {
         eventTableBody.innerHTML = '';
@@ -676,6 +704,7 @@
             const row = document.createElement('tr');
             row.setAttribute('data-id', `event-${index}-${dateIndex}`);
             row.innerHTML = `
+              <td>${index + 1}</td>
               <td>${event.name}</td>
               <td>${event.description || 'No description'}</td>
               <td>${date}</td>
@@ -802,7 +831,7 @@
         const dateGroup = document.createElement('div');
         dateGroup.className = 'date-group';
         dateGroup.innerHTML = `
-          <input type="text" name="event-date" class="form-control" placeholder="DD-MM-YYYY" required>
+          <input type="date" name="event-date" class="form-control" required>
           <button type="button" class="remove-date-btn"><i class="fas fa-trash"></i></button>
         `;
         datesContainer.appendChild(dateGroup);
@@ -825,7 +854,8 @@
         const name = document.getElementById('event-edit-name').value;
         const description = document.getElementById('event-edit-description').value;
         const images = [...existingImages, ...newFiles.map(file => URL.createObjectURL(file))];
-        const dates = Array.from(datesContainer.querySelectorAll('input[name="event-date"]')).map(input => input.value);
+        const dates = Array.from(datesContainer.querySelectorAll('input[name="event-date"]'))
+          .map(input => formatDateToDisplay(input.value));
 
         if (editIndex !== null) {
           // Update existing event
@@ -843,7 +873,7 @@
         imagePreviewContainer.innerHTML = '';
         datesContainer.innerHTML = `
           <div class="date-group">
-            <input type="text" name="event-date" class="form-control" placeholder="DD-MM-YYYY" required>
+            <input type="date" name="event-date" class="form-control" required>
             <button type="button" class="remove-date-btn"><i class="fas fa-trash"></i></button>
           </div>
         `;
@@ -866,7 +896,7 @@
           renderImagePreviews();
           datesContainer.innerHTML = event.dates.map(date => `
             <div class="date-group">
-              <input type="text" name="event-date" class="form-control" value="${date}" required>
+              <input type="date" name="event-date" class="form-control" value="${formatDateForInput(date)}" required>
               <button type="button" class="remove-date-btn"><i class="fas fa-trash"></i></button>
             </div>
           `).join('');
@@ -901,7 +931,7 @@
         renderImagePreviews();
         datesContainer.innerHTML = `
           <div class="date-group">
-            <input type="text" name="event-date" class="form-control" placeholder="DD-MM-YYYY" required>
+            <input type="date" name="event-date" class="form-control" required>
             <button type="button" class="remove-date-btn"><i class="fas fa-trash"></i></button>
           </div>
         `;
@@ -918,7 +948,7 @@
         imagePreviewContainer.innerHTML = '';
         datesContainer.innerHTML = `
           <div class="date-group">
-            <input type="text" name="event-date" class="form-control" placeholder="DD-MM-YYYY" required>
+            <input type="date" name="event-date" class="form-control" required>
             <button type="button" class="remove-date-btn"><i class="fas fa-trash"></i></button>
           </div>
         `;

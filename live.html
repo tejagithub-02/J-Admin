@@ -233,8 +233,6 @@
       display: block !important;
       max-height: none !important;
       overflow: visible !important;
-      /* Debugging outline */
-      outline: 2px solid red;
     }
     .ads-section .section-container {
       background: linear-gradient(to bottom right, #f7fafc, #e6e6e6);
@@ -267,8 +265,6 @@
       visibility: visible !important;
       display: table !important;
       max-height: none !important;
-      /* Debugging outline */
-      outline: 2px solid blue;
     }
     .section-container th, .section-container td {
       padding: 14px;
@@ -300,8 +296,6 @@
       flex-direction: column;
       gap: 15px;
       max-width: 100%;
-      /* Debugging outline */
-      outline: 2px solid green;
     }
     .section-container form label {
       font-size: 1.1rem;
@@ -317,6 +311,20 @@
     }
     .section-container form input[type="file"] {
       padding: 3px;
+    }
+    .section-container form input[type="date"] {
+      padding: 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      font-size: 1rem;
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+    .section-container form input[type="date"]::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      padding: 5px;
     }
     .edit-form-container {
       margin-top: 20px;
@@ -404,8 +412,6 @@
       overflow-y: visible !important;
       max-height: none !important;
       width: 100% !important;
-      /* Debugging outline */
-      
     }
     #streaming-table-container.hidden {
       display: none !important;
@@ -499,8 +505,7 @@
       <i class="fas fa-bars sidebar-toggle" id="sidebar-toggle"></i>
       <i class="fas fa-bars menu-toggle"></i>
       <img src="images/logo.png" alt="Rama Logo" class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16">
-      <h1 class="text-xl font-bold">SJRSM</h1>
-     
+      <h1 class="text-xl font-bold">Sri JayaRama Seva Mandali</h1>
     </div>
     <div class="flex items-center relative">
       <i class="fas fa-user-circle admin-icon text-2xl" id="admin-icon"></i>
@@ -517,8 +522,6 @@
       <i class="fas fa-times sidebar-expand" id="sidebar-expand"></i>
       <h3>SJRSM Admin</h3>
       <a href="index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
-     
-    
       <a href="seva.html"><i class="fas fa-pray"></i> <span>Seva Management</span></a>
       <a href="events.html"><i class="fas fa-calendar-alt"></i> <span>Events</span></a>
       <a href="recurring.html"><i class="fas fa-calendar-check"></i> <span>Recurring Events</span></a>
@@ -528,7 +531,7 @@
       <a href="card.html"><i class="fas fa-image"></i> <span>Card Management</span></a>
       <a href="gallery-upload.html"><i class="fas fa-image"></i> <span>Gallery</span></a>
       <a href="publications.html"><i class="fas fa-file-pdf"></i> <span>Add Publications</span></a>
-      <a href="about.html" ><i class="fas fa-info-circle"></i> <span>About</span></a>
+      <a href="about.html"><i class="fas fa-info-circle"></i> <span>About</span></a>
       <a href="password.html"><i class="fas fa-key"></i> <span>Change Password</span></a>
       <a href="#" id="sidebar-sign-out"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
     </div>
@@ -536,21 +539,19 @@
     <div class="main-content">
       <div id="streaming-section" class="section streaming-section">
         <div class="section-container">
-          <h3>Live stream Management</h3>
+          <h3>Live Stream Management</h3>
           <!-- Edit/Add Form -->
           <div id="streaming-edit-form-container" class="edit-form-container">
-            <h3 id="streaming-form-title">Add New Strem</h3>
+            <h3 id="streaming-form-title">Add New Stream</h3>
             <form id="streaming-edit-form">
               <input type="hidden" id="streaming-edit-id">
               <div class="form-group">
                 <label for="streaming-edit-title">Stream Title</label>
                 <input type="text" id="streaming-edit-title" class="form-control" required>
-            
               </div>
               <div class="form-group">
-                <label for="streaming-edit-image">Date</label>
-                <input type="text" id="streaming-edit-title" class="form-control" required>
-            
+                <label for="streaming-edit-date">Date</label>
+                <input type="date" id="streaming-edit-date" class="form-control" required>
               </div>
               <button type="submit" class="btn btn-primary">Save</button>
               <button type="button" class="btn btn-danger" onclick="cancelEdit('streaming')">Cancel</button>
@@ -568,10 +569,10 @@
                 </tr>
               </thead>
               <tbody id="streaming-table-body">
-                <tr data-id="stream-1" data-image="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABYSURBVFhH7dcxCoAwDATQXf//0y4sECoW3Z0tMBNBPPY9Qz0M8/BaABHACxABvABRwAtQBXwAVcAHUAV8AFXAB1AFfABVwAdQBXwAVcAHUAV8AFXAB1AFfABV4AcI6z3NMS0c6gAAAABJRU5ErkJggg==">
-                <td>1</td>
+                <tr data-id="stream-1">
+                  <td>1</td>
                   <td>Morning Puja</td>
-                <td>25-04-2025</td>
+                  <td>04/25/2025</td>
                   <td>
                     <a href="#" class="btn btn-primary btn-sm edit-btn" data-section="streaming">Edit</a>
                     <a href="#" class="btn btn-danger btn-sm delete-btn">Delete</a>
@@ -673,19 +674,34 @@
         });
       });
 
+      // Function to format date from YYYY-MM-DD to MM/DD/YYYY
+      function formatDateToDisplay(dateString) {
+        if (!dateString) return '';
+        const [year, month, day] = dateString.split('-');
+        return `${month}/${day}/${year}`;
+      }
+
+      // Function to format date from MM/DD/YYYY to YYYY-MM-DD for input value
+      function formatDateForInput(dateString) {
+        if (!dateString) return '';
+        const [month, day, year] = dateString.split('/');
+        return `${year}-${month}-${day}`;
+      }
+
       // Validate Form
       const validateForm = () => {
         const titleInput = document.getElementById('streaming-edit-title');
-        const imageInput = document.getElementById('streaming-edit-image');
+        const dateInput = document.getElementById('streaming-edit-date');
         const title = titleInput.value;
+        const date = dateInput.value;
 
         if (!title.trim()) {
           alert('Please enter a Stream Title');
           return false;
         }
 
-        if (!editIdInput.value && (!imageInput.files || imageInput.files.length === 0)) {
-          alert('Please select an image for the stream');
+        if (!date) {
+          alert('Please select a date for the stream');
           return false;
         }
 
@@ -700,14 +716,15 @@
         const row = button.closest('tr');
         const id = row.getAttribute('data-id');
         if (section === 'streaming') {
-          const title = row.cells[0].textContent;
-          const imageSrc = row.getAttribute('data-image');
+          const title = row.cells[1].textContent;
+          const date = row.cells[2].textContent;
           editIdInput.value = id;
           document.getElementById('streaming-edit-title').value = title;
+          document.getElementById('streaming-edit-date').value = formatDateForInput(date);
           formTitle.textContent = 'Edit Stream';
           editFormContainer.classList.add('active');
           tableContainer.classList.add('hidden');
-          console.log('Editing stream:', { id, title, imageSrc });
+          console.log('Editing stream:', { id, title, date });
         }
       };
 
@@ -734,11 +751,20 @@
       const handleDelete = (e) => {
         e.preventDefault();
         const row = e.currentTarget.closest('tr');
-        const title = row.cells[0].textContent;
+        const title = row.cells[1].textContent;
         if (confirm(`Are you sure you want to delete the stream "${title}"?`)) {
           row.remove();
+          updateRowNumbers();
           console.log('Deleted stream:', title);
         }
+      };
+
+      // Update row numbers after deletion
+      const updateRowNumbers = () => {
+        const rows = tableBody.querySelectorAll('tr');
+        rows.forEach((row, index) => {
+          row.cells[0].textContent = index + 1;
+        });
       };
 
       updateDeleteButtons();
@@ -750,66 +776,44 @@
 
         const id = editIdInput.value;
         const title = document.getElementById('streaming-edit-title').value;
-        const imageInput = document.getElementById('streaming-edit-image');
-        const imageFile = imageInput.files[0];
+        const date = document.getElementById('streaming-edit-date').value;
+        const formattedDate = formatDateToDisplay(date);
 
-        console.log('Form submitted:', { id, title, hasImage: !!imageFile });
+        console.log('Form submitted:', { id, title, date: formattedDate });
 
-        const updateTable = (imageSrc) => {
-          if (id) {
-            // Edit existing stream
-            const row = document.querySelector(`tr[data-id="${id}"]`);
-            if (row) {
-              row.cells[0].textContent = title;
-              row.cells[1].innerHTML = `<img src="${imageSrc}" alt="${title}" onerror="this.src='https://via.placeholder.com/100?text=Image+Not+Found'">`;
-              row.setAttribute('data-image', imageSrc);
-              console.log('Updated stream:', { id, title, imageSrc });
-            }
-          } else {
-            // Add new stream
-            const newId = `stream-${Date.now()}`;
-            const newRow = document.createElement('tr');
-            newRow.setAttribute('data-id', newId);
-            newRow.setAttribute('data-image', imageSrc);
-            newRow.innerHTML = `
-              <td>${title}</td>
-              <td><img src="${imageSrc}" alt="${title}" onerror="this.src='https://via.placeholder.com/100?text=Image+Not+Found'"></td>
-              <td>
-                <a href="#" class="btn btn-primary btn-sm edit-btn" data-section="streaming">Edit</a>
-                <a href="#" class="btn btn-danger btn-sm delete-btn">Delete</a>
-              </td>
-            `;
-            tableBody.appendChild(newRow);
-            updateEditButtons();
-            updateDeleteButtons();
-            console.log('Added new stream:', { id: newId, title, imageSrc });
-          }
-
-          editFormContainer.classList.remove('active');
-          tableContainer.classList.remove('hidden');
-          editForm.reset();
-          editIdInput.value = '';
-          formTitle.textContent = 'Add New Stream';
-        };
-
-        if (imageFile) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const imageSrc = e.target.result;
-            updateTable(imageSrc);
-          };
-          reader.onerror = (e) => {
-            console.error('Error reading image file:', e);
-            alert('Failed to read the image file. Please try again.');
-          };
-          reader.readAsDataURL(imageFile);
-        } else if (id) {
-          // If editing and no new image, retain existing image
+        if (id) {
+          // Edit existing stream
           const row = document.querySelector(`tr[data-id="${id}"]`);
           if (row) {
-            updateTable(row.getAttribute('data-image'));
+            row.cells[1].textContent = title;
+            row.cells[2].textContent = formattedDate;
+            console.log('Updated stream:', { id, title, date: formattedDate });
           }
+        } else {
+          // Add new stream
+          const newId = `stream-${Date.now()}`;
+          const newRow = document.createElement('tr');
+          newRow.setAttribute('data-id', newId);
+          newRow.innerHTML = `
+            <td>${tableBody.children.length + 1}</td>
+            <td>${title}</td>
+            <td>${formattedDate}</td>
+            <td>
+              <a href="#" class="btn btn-primary btn-sm edit-btn" data-section="streaming">Edit</a>
+              <a href="#" class="btn btn-danger btn-sm delete-btn">Delete</a>
+            </td>
+          `;
+          tableBody.appendChild(newRow);
+          updateEditButtons();
+          updateDeleteButtons();
+          console.log('Added new stream:', { id: newId, title, date: formattedDate });
         }
+
+        editFormContainer.classList.remove('active');
+        tableContainer.classList.remove('hidden');
+        editForm.reset();
+        editIdInput.value = '';
+        formTitle.textContent = 'Add New Stream';
       });
 
       // Cancel edit/add
